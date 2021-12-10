@@ -118,7 +118,8 @@ prometheus:
       enabled: true
       annotations:
          kubernetes.io/ingress.class: 'alb'
-         kubernetes.io/cluster/eks_general-purpose-mgmt: owned
+         kubernetes.io/role/elb: 1
+         kubernetes.io/cluster/eks_general-purpose-mgmt: 'owned'
          #kubernetes.io/tls-acme: 'true'
          alb.ingress.kubernetes.io/scheme: internet-facing
          alb.ingress.kubernetes.io/load-balancer-attributes: 'routing.http2.enabled=true,idle_timeout.timeout_seconds=60'
