@@ -129,7 +129,7 @@ prometheus:
         annotations:
           alb.ingress.kubernetes.io/target-type: ip
       labels: {}
-      path: /*
+      path: /
       hosts:
          - mini-prom.internala.company.com/*
       
