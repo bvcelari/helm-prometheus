@@ -100,19 +100,42 @@ prometheus:
 
   server:
     ingress:
-      ## If true, Prometheus server Ingress will be created
-      ##
+      ####  ## If true, Prometheus server Ingress will be created
+      ####  ##
+      ####  enabled: true
+      ####  # For Kubernetes >= 1.18 you should specify the ingress-controller via the field ingressClassName
+      ####  # See https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/#specifying-the-class-of-an-ingress
+      ####  # ingressClassName: nginx
+      ####  ## Prometheus server Ingress annotations
+      ####  ##
+      ####  ingressClassName: aws-load-balancer
+      ####  annotations: 
+      ####    kubernetes.io/ingress.class: alb
+      ####    alb.ingress.kubernetes.io/scheme: internet-facing
+      ####    alb.ingress.kubernetes.io/target-type: ip
       enabled: true
-      # For Kubernetes >= 1.18 you should specify the ingress-controller via the field ingressClassName
-      # See https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/#specifying-the-class-of-an-ingress
-      # ingressClassName: nginx
-      ## Prometheus server Ingress annotations
-      ##
-      ingressClassName: aws-load-balancer
-      annotations: 
-        kubernetes.io/ingress.class: alb
-        alb.ingress.kubernetes.io/scheme: internet-facing
-        alb.ingress.kubernetes.io/target-type: ip
+      annotations:
+         kubernetes.io/ingress.class: 'alb'
+         #kubernetes.io/tls-acme: 'true'
+         alb.ingress.kubernetes.io/scheme: internet-facing
+         alb.ingress.kubernetes.io/load-balancer-attributes: 'routing.http2.enabled=true,idle_timeout.timeout_seconds=60'
+         alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS":443}]'
+         alb.ingress.kubernetes.io/actions.ssl-redirect: '{"Type": "redirect", "RedirectConfig": { "Protocol": "HTTPS", "Port": "443", "StatusCode": "HTTP_301"}}'
+      service:
+        annotations:
+          alb.ingress.kubernetes.io/target-type: ip
+      labels: {}
+      path: /*
+      hosts:
+         - mini-prom.internala.company.com/*
+      
+      ## Extra paths to prepend to every host configuration. This is useful when working with annotation based services.
+      extraPaths:
+       - path: /*
+         backend:
+           serviceName: ssl-redirect
+           servicePort: use-annotation
+
 
 tolerations: []
 
