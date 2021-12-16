@@ -121,7 +121,6 @@ prometheus:
          alb.ingress.kubernetes.io/scheme: internal
          alb.ingress.kubernetes.io/target-type: ip
          alb.ingress.kubernetes.io/group.name: mygroup
-         alb.ingress.kubernetes.io/load-balancer-name: custom-name
          #kubernetes.io/tls-acme: 'true'
          alb.ingress.kubernetes.io/load-balancer-attributes: 'routing.http2.enabled=true,idle_timeout.timeout_seconds=60'
          alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS":443}]'
